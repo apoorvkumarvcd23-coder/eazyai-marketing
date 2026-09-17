@@ -9,7 +9,7 @@ ffmpeg -i public/video/hero-interview.mp4 -an -vf "fps=12.478,scale=1440:-2:flag
 ffmpeg -i public/video/hero-interview.mp4 -an -vf "fps=12.478,scale=720:1280:force_original_aspect_ratio=increase:flags=lanczos,crop=720:1280" -frames:v 140 -c:v libwebp -quality 68 -compression_level 6 -preset picture public/frames/mobile/frame_%04d.webp
 ```
 
-The implementation shows the source video as a graceful fallback for reduced-motion, data-saver, failed-frame, and no-JavaScript cases. The actual image-sequence payload is below 8 MB.
+The fixed canvas follows normal document scroll across the whole page; there is no pinned video section. Content is always visible HTML. A responsive middle-frame picture stays behind the canvas for reduced motion, data saver, failed images and no JavaScript. The actual image-sequence payload is below 8 MB.
 
 ### Alternate video seeking mode
 
@@ -22,7 +22,15 @@ ffmpeg -i input.mp4 -an -c:v libvpx-vp9 -crf 30 -b:v 0 -g 1 public/video/hero-sc
 
 ## Tunable constants
 
-`frameCount` controls sequence length; `scrollLength` controls pinned scroll distance; `scrub` controls catch-up smoothing; `textTimings` controls the normalized start/end positions of each hero message.
+`FRAME_COUNT` controls sequence length; `CONCURRENCY` limits parallel image loads (default 3). Frames load every fourth image first, then fill the gaps. The closest available image is drawn on a requestAnimationFrame callback. Canvas resolution is capped at DPR 2; resize updates the cover crop and switches the image set at 768px.
+
+## September redesign
+
+Editorial typography and open, ruled layouts replace the feature-card grid. Original copy is informed by the typographic hierarchy and short statement-led structure in Awwwards' Studio Freight showcase: https://assets.awwwards.com/awards/gallery/2023/07/HOT-RIGHT-NOW-BOOK-2023.pdf . No site copy was reproduced.
+
+Charts cite Ashby's 2026 State of Startup Hiring report: https://www.ashbyhq.com/talent-trends-report/reports/startup-hiring . Applications per hire by headcount: 298 (<25), 348 (25–49), 327 (50–99), 339 (100–300). Applicants interviewed per hire: 18 technical, 13 business. Bars share a zero baseline. Figures describe the source's startup sample, not measured product results. Scroll entrances and hover motion settle back to the correct values.
+
+Contact opens the user's email client using the brief's info@eazyai.com address. No form-service account is configured; the previous Netlify-only form did not work on Render and has been removed.
 
 ## Test checklist
 
